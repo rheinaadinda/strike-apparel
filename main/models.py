@@ -5,12 +5,12 @@ from django.db import models
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
-        ('transfer', 'Transfer'),
-        ('update', 'Update'),
-        ('exclusive', 'Exclusive'),
-        ('match', 'Match'),
-        ('rumor', 'Rumor'),
-        ('analysis', 'Analysis'),
+        ('jersey', 'Jersey'),
+        ('price', 'Price'),
+        ('size', 'Size'),
+        ('shoes', 'Shoes'),
+        ('ball', 'Ball'),
+        ('others', 'Others'),
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
