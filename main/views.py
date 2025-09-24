@@ -116,14 +116,3 @@ def show_json_by_id(request, product_id):
     except Product.DoesNotExist:
         return HttpResponse(status=404)
     
-def create_employee(request):
-    employee = Employee.objects.create(name="mora", age=19, personality="fun")
-
-
-    context = {
-        'name' : employee.name, 
-        'age' : employee.age,
-        'personality' : employee.personality 
-    }
-
-    return render(request, 'employee.html', context)

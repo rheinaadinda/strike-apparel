@@ -36,7 +36,3 @@ class Product(models.Model):
     #     self.news_views += 1
     #     self.save()
 
-class Employee(models.Model):
-    name = models.CharField(max_length= 255)
-    age = models.IntegerField()
-    personality = models.TextField()
