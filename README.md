@@ -15,7 +15,11 @@ diwaspadai? Bagaimana Django menangani hal tersebut?
 -> Penggunaan cookies tidak aman secara default karena rentan terhadap serangan seperti session hijacking (pencurian ID sesi), CSRF (pemalsuan permintaan), dan pencurian via XSS, terutama jika tanpa flag Secure (hanya HTTPS), HttpOnly (lindungi dari script), atau SameSite (batasi cross-site). Django menanganinya dengan middleware CSRF protection yang otomatis menambahkan token, dukungan set_cookie() untuk flag keamanan seperti secure=True dan httponly=True, serta session framework yang menyimpan data server-side dengan cookie ID terenkripsi, meminimalkan risiko eksposur data sensitif. 
 
 Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
-->
+-> Pertama, saya membuat fungsi registrasi, login, dan logout untuk memungkinkan pengguna mengakses aplikasi sebelumnya sesuai dengan status login/logoutnya. Saya mengerjakan hal tersebut dengan menambahkan import dan fungsi di views.py. Kemudian, saya mengatur file HTML untuk lama regist atau login. Lalu, saya menambahkan fungsi yang saya buat di views.py ke urls.py dengan di import dan menambahkan path url ke dalam urlpatterns untuk akses fungsi.
+
+Kedua, saya menghubungkan model Product dengan user melalui models.py dimana saya mengubah class Product dan migrate models. Lalu, saya mengubah fungsi create_product dan show_main di views.py sesuai tutorial. Saya mengatur bagaimana caranya Django tidak langsung menyimpan objek hasil form ke database sehingga saya memiliki kesempatan untuk memodifikasi objek tersebut terlebih dahulu sebelum disimpan. Kesempatan tersebut tujuannya agar saya dapat mengisi field user dengan nilai request.user, yaitu pengguna yang sedang login. Dengan cara ini, setiap objek yang dibuat akan secara otomatis terhubung dengan pengguna yang membuatnya.
+
+Ketiga, saya menampilkan detail informasi pengguna yang sedang logged in seperti username di main.html dan menerapkan cookies seperti last_login pada halaman utama aplikasi menggunakan datetime dengan mengubah views.py.
 
 
 TUGAS 3

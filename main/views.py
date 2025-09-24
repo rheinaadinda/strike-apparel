@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from main.forms import ProductForm
-from main.models import Product
+from main.models import Employee, Product
 from django.http import HttpResponse
 from django.core import serializers
 from django.contrib.auth.forms import UserCreationForm
@@ -115,3 +115,15 @@ def show_json_by_id(request, product_id):
         return HttpResponse(json_data, content_type="application/json")
     except Product.DoesNotExist:
         return HttpResponse(status=404)
+    
+def create_employee(request):
+    employee = Employee.objects.create(name="mora", age=19, personality="fun")
+
+
+    context = {
+        'name' : employee.name, 
+        'age' : employee.age,
+        'personality' : employee.personality 
+    }
+
+    return render(request, 'employee.html', context)
