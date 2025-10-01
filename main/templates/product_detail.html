@@ -1,22 +1,101 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>{{ product.title }} - Strike Apparel</title>
+{% endblock meta %}
+
 {% block content %}
-<p><a href="{% url 'main:show_main' %}"><button>← Back to Product List</button></a></p>
+<div class="bg-[#E1EEF2] w-full min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-<h1>{{ product.name }}</h1>
-<p><b>{{ product.get_category_display }}</b>{% if product.is_featured %} | 
-    <b>Featured</b>{% endif %}</p>
+    <!-- Back Navigation -->
+    <div class="mb-6">
+      <a href="{% url 'main:show_main' %}" 
+         class="text-gray-600 hover:text-gray-900 font-medium transition-colors">
+        ← Back to Products
+      </a>
+    </div>
 
-{% if product.thumbnail %}
-<img src="{{ product.thumbnail }}" alt="product thumbnail" width="300">
-<br /><br />
-{% endif %}
+    <!-- Product Detail Layout -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
 
-<p>{{ product.description }}</p>
+      <!-- Left: Image -->
+      <div>
+        {% if product.thumbnail %}
+          <img src="{{ product.thumbnail }}" 
+               alt="{{ product.title }}" 
+               class="w-full h-80 sm:h-96 object-cover rounded-lg shadow-md">
+        {% else %}
+          <div class="w-full h-80 bg-gray-200 rounded-lg"></div>
+        {% endif %}
+      </div>
 
-{% if product.user %}
-    <p>Author: {{ product.user.username }}</p>
-{% else %}
-    <p>Author: Anonymous</p>
-{% endif %}
+      <!-- Right: Info -->
+      <div class="flex flex-col justify-between">
+        
+        <!-- Category & Status -->
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+          <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-[#57A0D3] text-white">
+            {{ product.get_category_display }}
+          </span>
+          {% if product.is_featured %}
+            <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800">
+              Featured
+            </span>
+          {% endif %}
+        </div>
 
+        <!-- Title -->
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">
+          {{ product.title }}
+        </h1>
+
+        <!-- Price -->
+        <p class="text-2xl sm:text-3xl font-bold text-[#57A0D3] mb-6">
+          Rp {{ product.price|floatformat:0 }}
+        </p>
+
+        <!-- Short Description -->
+        <p class="text-gray-700 leading-relaxed text-base sm:text-lg mb-6">
+          {{ product.description|truncatewords:25 }}
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex space-x-4">
+          <a href="{% url 'main:show_product' product.id %}" 
+             class="px-6 py-3 rounded-lg bg-[#57A0D3] hover:bg-[#57A0D3] text-white font-semibold transition-colors">
+            Buy Now
+          </a>
+          <button 
+             class="px-6 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors">
+            Add to Cart
+          </button>
+        </div>
+
+        <!-- Author Info -->
+        <div class="mt-8 pt-6 border-t border-gray-200">
+          <p class="text-sm text-gray-500">Sold by:</p>
+          <p class="font-medium text-gray-900">
+            {% if product.user %}
+              {{ product.user.username }}
+            {% else %}
+              Anonymous
+            {% endif %}
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Long Description -->
+    <div class="mt-10 bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4">Product Description</h2>
+      <p class="text-gray-700 leading-relaxed whitespace-pre-line">
+        {{ product.description }}
+      </p>
+    </div>
+
+  </div>
+</div>
 {% endblock content %}
