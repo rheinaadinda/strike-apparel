@@ -1,0 +1,7 @@
+{% for product in product_list %}
+  {% include 'card_product.html' with product=product %}
+{% empty %}
+  <div class="col-span-full bg-white rounded-lg border border-gray-200 p-12 text-center shadow-sm">
+    <p class="text-gray-500">No products found.</p>
+  </div>
+{% endfor %}
