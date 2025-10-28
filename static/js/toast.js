@@ -7,22 +7,19 @@ function showToast(title, message, type = 'normal', duration = 3000) {
     if (!toast) return;
 
     // reset semua style
-    toast.className = 'fixed bottom-8 right-8 z-50 w-80 p-4 px-6 rounded-xl backdrop-blur-md bg-white/80 border border-white/30 shadow-lg flex items-start gap-4 opacity-0 pointer-events-none transform translate-y-12 transition-all duration-300 ease-in-out';
+    toast.className = 'fixed bottom-8 right-8 z-50 w-80 p-4 px-6 rounded-xl backdrop-blur-md bg-white/70 border border-white/30 shadow-lg flex items-start gap-4 opacity-0 pointer-events-none transform translate-y-12 transition-all duration-300 ease-in-out';
     toastIcon.textContent = '';
 
-    // type styling & icon (ubah ke tema biru)
+    // type styling & icon
     if (type === 'success') {
-        toast.classList.add('border-[#57A0D3]', 'text-[#3579aa]');
+        toast.classList.add('border-green-400', 'text-green-700');
         toastIcon.textContent = '✔️';
     } else if (type === 'error') {
         toast.classList.add('border-red-400', 'text-red-700');
         toastIcon.textContent = '❌';
-    } else if (type === 'info') {
-        toast.classList.add('border-[#57A0D3]', 'text-[#57A0D3]');
-        toastIcon.textContent = 'ℹ️';
     } else {
         toast.classList.add('border-gray-300', 'text-gray-800');
-        toastIcon.textContent = '💬';
+        toastIcon.textContent = 'ℹ️';
     }
 
     toastTitle.textContent = title;

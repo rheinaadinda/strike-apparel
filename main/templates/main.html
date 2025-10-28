@@ -7,6 +7,8 @@
 
 {% block content %}
 {% include 'navbar.html' %}
+{% include 'toast.html' %}
+
 <div class="bg-gray-50 w-full pt-16 min-h-screen">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -16,21 +18,35 @@
       <p class="text-gray-600">Stay updated with the latest football products</p>
     </div>
 
+    <!-- Buttons Container -->
+    <div class="flex gap-3 mb-4">
+        <!-- Create Product -->
+        <button onclick="showModal()" 
+            class="inline-flex items-center px-4 py-2 bg-white text-blue-600 font-semibold outline outline-2 outline-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition-colors">
+            Create Product by AJAX
+        </button>
+
+        <!-- Refresh Button -->
+        <button onclick="refreshProducts()" 
+            class="inline-flex items-center px-4 py-2 bg-white text-blue-600 font-semibold outline outline-2 outline-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition-colors">
+            Refresh
+        </button>
+    </div>
+
+
     <!-- Filter Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
       <div class="flex flex-wrap gap-3 mb-4 sm:mb-0">
 
         <!-- All Product -->
-        <a 
-          href="?filter=all{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" 
-          class="{% if request.GET.filter == 'all' or not request.GET.filter %} bg-[#57A0D3] text-white {% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#57A0D3] hover:text-white">
+        <a href="?filter=all{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" 
+           class="{% if request.GET.filter == 'all' or not request.GET.filter  %} bg-blue-600 text-white {% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-blue-600 hover:text-white">
           All Product
         </a>
 
         <!-- My Product -->
-        <a 
-          href="?filter=my{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" 
-          class="{% if request.GET.filter == 'my' %} bg-[#57A0D3] text-white {% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#57A0D3] hover:text-white">
+        <a href="?filter=my{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" 
+           class="{% if request.GET.filter == 'my' %} bg-blue-600 text-white {% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-blue-600 hover:text-white">
           My Product
         </a>
 
@@ -39,10 +55,7 @@
           {% if request.GET.filter %}
             <input type="hidden" name="filter" value="{{ request.GET.filter }}">
           {% endif %}
-          <select 
-            name="category" 
-            onchange="this.form.submit()" 
-            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#57A0D3] focus:border-[#57A0D3]">
+          <select name="category" onchange="this.form.submit()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             <option value="">All Categories</option>
             <option value="jersey" {% if request.GET.category == 'jersey' %}selected{% endif %}>Jersey</option>
             <option value="ball" {% if request.GET.category == 'ball' %}selected{% endif %}>Bola</option>
@@ -59,24 +72,22 @@
     </div>
 
     <!-- Product Grid -->
-    {% if not product_list %}
-      <div class="bg-white rounded-lg border border-gray-200 p-12 text-center shadow-sm">
-        <div class="w-32 h-32 mx-auto mb-4">
-          <img src="{% static 'image/no-product.png' %}" alt="No product available" class="w-full h-full object-contain">
+    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for product in product_list %}
+        {% include 'card_product.html' with product=product %}
+      {% empty %}
+        <div class="col-span-full bg-white rounded-lg border border-gray-200 p-12 text-center shadow-sm">
+          <div class="w-32 h-32 mx-auto mb-4">
+            <img src="{% static 'image/no-product.png' %}" alt="No product available" class="w-full h-full object-contain">
+          </div>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No product found</h3>
+          <p class="text-gray-500 mb-6">Be the first to add football product.</p>
+          <button onclick="showModal()" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            Create Product
+          </button>
         </div>
-        <h3 class="text-lg font-medium text-gray-900 mb-2">No product found</h3>
-        <p class="text-gray-500 mb-6">Be the first to add football product.</p>
-        <a href="{% url 'main:create_product' %}" class="inline-flex items-center px-4 py-2 bg-[#57A0D3] text-white rounded-md hover:bg-[#57A0D3] transition-colors">
-          Create Product
-        </a>
-      </div>
-    {% else %}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for product in product_list %}
-          {% include 'card_product.html' with product=product %}
-        {% endfor %}
-      </div>
-    {% endif %}
+      {% endfor %}
+    </div>
   </div>
 </div>
 
@@ -119,12 +130,12 @@
           <input type="url" id="thumbnail" name="thumbnail" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2">
         </div>
         <div class="flex items-center mb-4">
-          <input id="is_featured" name="is_featured" type="checkbox" class="w-4 h-4 text-[#57A0D3] border-gray-300 rounded">
+          <input id="is_featured" name="is_featured" type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded">
           <label for="is_featured" class="ml-2 text-sm font-medium text-gray-900">Featured</label>
         </div>
         <div class="flex justify-end gap-3 border-t pt-4">
           <button type="button" class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50" onclick="hideModal()">Cancel</button>
-          <button type="submit" class="bg-[#57A0D3] text-white px-4 py-2 rounded-md hover:bg-[#57A0D3]/90">Publish</button>
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Publish</button>
         </div>
       </form>
     </div>
@@ -156,7 +167,7 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 function showToast(title, message, type) {
     const toastContainer = document.getElementById('toast-container');
     const toast = document.createElement('div');
-    toast.className = `p-4 rounded shadow ${type === 'success' ? 'bg-[#57A0D3] text-white' : 'bg-red-500 text-white'}`;
+    toast.className = `p-4 rounded shadow ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
     toast.innerHTML = `<strong>${title}</strong><p>${message}</p>`;
     toastContainer.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);

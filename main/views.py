@@ -1,12 +1,11 @@
+
 from django.shortcuts import render, redirect, get_object_or_404
 from main.forms import ProductForm
 from main.models import Product
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import authenticate, login
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import datetime
@@ -15,53 +14,6 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
-
-def delete_product(request, id):
-    product = get_object_or_404(Product, pk=id)
-    product.delete()
-    return HttpResponseRedirect(reverse('main:show_main'))
-
-def edit_product(request, id):
-    product = get_object_or_404(Product, pk=id)
-    form = ProductForm(request.POST or None, instance=product)
-    if form.is_valid() and request.method == 'POST':
-        form.save()
-        return redirect('main:show_main')
-
-def logout_user(request):
-    logout(request)
-    response = HttpResponseRedirect(reverse('main:login'))
-    response.delete_cookie('last_login')
-    return response
-
-# Create your views here.
-def login_user(request):
-   if request.method == 'POST':
-      form = AuthenticationForm(data=request.POST)
-
-      if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            response = HttpResponseRedirect(reverse("main:show_main"))
-            response.set_cookie('last_login', str(datetime.datetime.now()))
-            return response
-
-   else:
-      form = AuthenticationForm(request)
-   context = {'form': form}
-   return render(request, 'login.html', context)
-
-def register(request):
-    form = UserCreationForm()
-
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your account has been successfully created!')
-            return redirect('main:login')
-    context = {'form':form}
-    return render(request, 'register.html', context)
 
 @login_required(login_url='/login')
 def show_main(request):
@@ -79,16 +31,15 @@ def show_main(request):
         product_list = product_list.filter(category__iexact=category)  
     
     context = {
-        'app' : 'Strike Apparel',
-        'name': 'Rheina Adinda Morani Sinurat',
-        'npm' : '2406435881',
-        'class': 'PBP E',
+        'npm' : '2406358043',
+        'name': request.user.username,
+        'class': 'PBP D',
         'product_list': product_list,
-        'last_login' : request.COOKIES.get('last_login', 'Never')
+        'last_login': request.COOKIES.get('last_login', 'Never'),
     }
 
     return render(request, "main.html", context)
-    
+
 def create_product(request):
     form = ProductForm(request.POST or None)
 
