@@ -159,6 +159,21 @@
 <!-- Toast Container -->
 <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2"></div>
 
+<footer class="bg-gray-600 text-black">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+    <div class="flex items-center gap-3 mb-4 sm:mb-0">
+      <img src="{% static 'image/no-product.png' %}" alt="No product available" class="w-full h-full object-contain">
+    </div>
+
+    <div class="flex items-center gap-3 mb-4 sm:mb-0">
+      <a href="#" class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50">Button</a>
+    </div>
+
+  </div>
+</footer>
+
+
 <script>
 // CSRF Token
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
